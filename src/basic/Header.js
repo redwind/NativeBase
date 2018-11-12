@@ -4,7 +4,6 @@ import { View, StatusBar, ViewPropTypes, StyleSheet } from "react-native";
 import { connectStyle } from "native-base-shoutem-theme";
 import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
 import variable from "../theme/variables/platform";
-import _ from "lodash";
 class Header extends Component {
   static contextTypes = {
     theme: PropTypes.object

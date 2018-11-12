@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import _ from "lodash";
+import random from 'lodash/random';
+import isEqual from 'lodash/isEqual';
 import { connectStyle, StyleProvider } from "native-base-shoutem-theme";
 import mapPropsToStyleNames from "../../utils/mapPropsToStyleNames";
 import variable from "./../../theme/variables/platform";
@@ -194,7 +195,7 @@ const ScrollableTabBar = createReactClass({
     } else {
       return (
         <Button
-          key={_.random(1.2, 5.2)}
+          key={random(1.2, 5.2)}
           onPress={() => onPressHandler(page)}
           onLayout={onLayoutHandler}
         >
@@ -292,7 +293,7 @@ const ScrollableTabBar = createReactClass({
   componentWillReceiveProps(nextProps) {
     // If the tabs change, force the width of the tabs container to be recalculated
     if (
-      !_.isEqual(this.props.tabs, nextProps.tabs) &&
+      !isEqual(this.props.tabs, nextProps.tabs) &&
       this.state._containerWidth
     ) {
       this.setState({ _containerWidth: null });

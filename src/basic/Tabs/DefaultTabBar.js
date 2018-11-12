@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import _ from "lodash";
+import random from "lodash/random";
 import { connectStyle, StyleProvider } from "native-base-shoutem-theme";
 import mapPropsToStyleNames from "../../utils/mapPropsToStyleNames";
 import variable from "./../../theme/variables/platform";
@@ -84,7 +84,7 @@ const DefaultTabBar = createReactClass({
       return (
         <Button
           style={{ flex: 1 }}
-          key={_.random(1.2, 5.2)}
+          key={random(1.2, 5.2)}
           onPress={() => onPressHandler(page)}
         >
           <TabHeading style={tabHeaderStyle} active={isTabActive}>

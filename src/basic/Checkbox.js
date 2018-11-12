@@ -5,7 +5,6 @@ import IconNB from "react-native-vector-icons/Ionicons";
 import { connectStyle } from "native-base-shoutem-theme";
 import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
 import variable from "../theme/variables/platform";
-import _ from "lodash";
 import computeProps from "../utils/computeProps";
 
 class CheckBox extends Component {

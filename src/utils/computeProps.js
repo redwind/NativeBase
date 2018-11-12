@@ -1,12 +1,15 @@
 "use_strict";
-import _ from "lodash";
+import clone from 'lodash/clone';
+import assign from 'lodash/assign';
+import merge from 'lodash/merge';
+import forEach from 'lodash/forEach';
 import { StyleSheet } from "react-native";
 
 module.exports = function(incomingProps, defaultProps) {
   // External props has a higher precedence
   let computedProps = {};
 
-  incomingProps = _.clone(incomingProps);
+  incomingProps = clone(incomingProps);
   delete incomingProps.children;
 
   const incomingPropsStyle = incomingProps.style;
@@ -14,7 +17,7 @@ module.exports = function(incomingProps, defaultProps) {
 
   // console.log(defaultProps, incomingProps);
   if (incomingProps) {
-    _.assign(computedProps, defaultProps, incomingProps);
+    assign(computedProps, defaultProps, incomingProps);
   } else {
     computedProps = defaultProps;
   }
@@ -23,11 +26,11 @@ module.exports = function(incomingProps, defaultProps) {
     let computedPropsStyle = {};
     computedProps.style = {};
     if (Array.isArray(incomingPropsStyle)) {
-      _.forEach(incomingPropsStyle, style => {
+      forEach(incomingPropsStyle, style => {
         if (typeof style === "number") {
-          _.merge(computedPropsStyle, StyleSheet.flatten(style));
+          merge(computedPropsStyle, StyleSheet.flatten(style));
         } else {
-          _.merge(computedPropsStyle, style);
+          merge(computedPropsStyle, style);
         }
       });
     } else if (typeof incomingPropsStyle === "number") {
@@ -36,7 +39,7 @@ module.exports = function(incomingProps, defaultProps) {
       computedPropsStyle = incomingPropsStyle;
     }
 
-    _.merge(computedProps.style, defaultProps.style, computedPropsStyle);
+    merge(computedProps.style, defaultProps.style, computedPropsStyle);
   }
   // console.log("computedProps ", computedProps);
   return computedProps;

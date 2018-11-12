@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
 import { Picker, Modal, View, ViewPropTypes, FlatList } from "react-native";
-import _ from "lodash";
+import find from "lodash/find";
+import get from "lodash/get";
 import { Text } from "./Text";
 import { List } from "./List";
 import { IconNB as Icon } from "./IconNB";
@@ -71,15 +72,15 @@ class PickerNB extends Component {
 
   getLabel(props) {
     let children = this.getChildren(props.children);
-    const item = _.find(
+    const item = find(
       children,
       child => child.props.value === props.selectedValue
     );
-    return _.get(item, "props.label");
+    return get(item, "props.label");
   }
 
   getSelectedItem() {
-    return _.find(
+    return find(
       this.props.children,
       child => child.props.value === this.props.selectedValue
     );

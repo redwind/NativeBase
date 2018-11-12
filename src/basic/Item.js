@@ -16,7 +16,7 @@ import { connectStyle } from "native-base-shoutem-theme";
 import variables from "../theme/variables/platform";
 import computeProps from "../utils/computeProps";
 import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
-import _ from "lodash";
+import remove from "lodash/remove";
 
 class Item extends Component {
   constructor(props) {
@@ -40,7 +40,7 @@ class Item extends Component {
   componentWillReceiveProps(nextProps) {
     const childrenArray = React.Children.toArray(nextProps.children);
     let inputProps = {};
-    _.remove(childrenArray, item => {
+    remove(childrenArray, item => {
       if (item.type.displayName === "Styled(Input)") {
         inputProps = item.props;
         this.inputProps = item.props;
@@ -117,7 +117,7 @@ class Item extends Component {
 
     let label = [];
     let labelProps = {};
-    label = _.remove(childrenArray, item => {
+    label = remove(childrenArray, item => {
       if (item.type === Label) {
         labelProps = item.props;
         return item;
@@ -126,7 +126,7 @@ class Item extends Component {
 
     let input = [];
     let inputProps = {};
-    input = _.remove(childrenArray, item => {
+    input = remove(childrenArray, item => {
       if (item.type === Input) {
         inputProps = item.props;
         this.inputProps = item.props;
@@ -136,7 +136,7 @@ class Item extends Component {
 
     let icon = [];
     let iconProps = {};
-    icon = _.remove(childrenArray, item => {
+    icon = remove(childrenArray, item => {
       if (item.type === Icon) {
         iconProps = item.props;
         return item;
@@ -145,7 +145,7 @@ class Item extends Component {
 
     let image = [];
     let imageProps = {};
-    image = _.remove(childrenArray, item => {
+    image = remove(childrenArray, item => {
       if (item.type === Thumbnail) {
         imageProps = item.props;
         return item;

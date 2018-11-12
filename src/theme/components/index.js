@@ -1,6 +1,6 @@
 // @flow
 
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import bodyTheme from "./Body";
 import leftTheme from "./Left";
 import rightTheme from "./Right";
@@ -216,7 +216,7 @@ export default (variables /*: * */ = variable) => {
   };
 
   const cssifyTheme = (grandparent, parent, parentKey) => {
-    _.forEach(parent, (style, styleName) => {
+    forEach(parent, (style, styleName) => {
       // console.log('styleName', styleName);
       // console.log('parentKey', parentKey);
       if (

@@ -15,7 +15,9 @@ import { Icon } from "./Icon";
 import { IconNB } from "./IconNB";
 import { Button } from "./Button";
 import variables from "./../theme/variables/platform";
-import _ from "lodash";
+import clone from 'lodash/clone';
+import remove from 'lodash/remove';
+import merge from 'lodash/merge';
 import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
 import { connectStyle } from "native-base-shoutem-theme";
 
@@ -183,14 +185,14 @@ class Fab extends Component {
   }
 
   getContainerStyle() {
-    return _.merge(this.getInitialStyle().container, this.props.containerStyle);
+    return merge(this.getInitialStyle().container, this.props.containerStyle);
   }
 
   prepareFabProps() {
     var defaultProps = {
       style: this.getInitialStyle().fab
     };
-    var incomingProps = _.clone(this.props);
+    var incomingProps = clone(this.props);
     delete incomingProps.onPress;
 
     return computeProps(incomingProps, defaultProps);
@@ -214,10 +216,10 @@ class Fab extends Component {
           : i * 50 + 50
     };
 
-    return _.merge(this.getInitialStyle().buttonStyle, StyleSheet.flatten(child.props.style), type);
+    return merge(this.getInitialStyle().buttonStyle, StyleSheet.flatten(child.props.style), type);
   }
   prepareButtonProps(child) {
-    var inp = _.clone(child.props);
+    var inp = clone(child.props);
     delete inp.style;
 
     var defaultProps = {};
@@ -227,7 +229,7 @@ class Fab extends Component {
 
   componentDidMount() {
     let childrenArray = React.Children.toArray(this.props.children);
-    let icon = _.remove(childrenArray, item => {
+    let icon = remove(childrenArray, item => {
       if (item.type.displayName === "Styled(Button)") {
         return true;
       }
@@ -250,7 +252,7 @@ class Fab extends Component {
 
   renderFab() {
     let childrenArray = React.Children.toArray(this.props.children);
-    let icon = _.remove(childrenArray, item => {
+    let icon = remove(childrenArray, item => {
       if (item.type.displayName === "Styled(Button)") {
         return true;
       }
@@ -265,7 +267,7 @@ class Fab extends Component {
 
   renderButtons() {
     let childrenArray = React.Children.toArray(this.props.children);
-    // let icon = _.remove(childrenArray, item => {
+    // let icon = remove(childrenArray, item => {
     // 	if (item.type == Icon) {
     // 		return true;
     // 	}

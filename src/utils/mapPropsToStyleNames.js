@@ -1,10 +1,10 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 
 const mapPropsToStyleNames = (styleNames, props) => {
-  const keys = _.keys(props);
-  const values = _.values(props);
+  const keys = keys(props);
+  const values = values(props);
 
-  _.forEach(keys, (key, index) => {
+  forEach(keys, (key, index) => {
     if (values[index]) {
       styleNames.push(key);
     }
