@@ -1,0 +1,2 @@
+Object.defineProperty(exports,"__esModule",{value:true});exports.NativeBaseContext=undefined;var _react=require('react');var _react2=_interopRequireDefault(_react);function _interopRequireDefault(obj){return obj&&obj.__esModule?obj:{default:obj};}var NativeBaseContext=exports.NativeBaseContext=_react2.default.createContext({theme:null,foregroundColor:null});
+//# sourceMappingURL=NativeBaseContext.js.map
