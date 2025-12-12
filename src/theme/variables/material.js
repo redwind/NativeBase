@@ -26,7 +26,6 @@ export default {
   contentStyle: '#f5f4f5',
   expandedIconStyle: '#000',
   accordionBorderColor: '#d3d3d3',
-  disableRow: '#a9a9a9',
 
   // ActionSheet
   elevation: 4,
@@ -130,7 +129,7 @@ export default {
   brandDanger: '#d9534f',
   brandWarning: '#f0ad4e',
   brandDark: '#000',
-  brandLight: '#a9a9a9',
+  brandLight: '#f4f4f4',
 
   // Container
   containerBgColor: '#fff',
@@ -181,10 +180,14 @@ export default {
   toolbarDefaultBorder: '#3F51B5',
   iosStatusbar: 'light-content',
   get statusBarColor() {
-    return color(this.toolbarDefaultBg).darken(0.2).hex();
+    return color(this.toolbarDefaultBg)
+      .darken(0.2)
+      .hex();
   },
   get darkenHeader() {
-    return color(this.tabBgColor).darken(0.03).hex();
+    return color(this.tabBgColor)
+      .darken(0.03)
+      .hex();
   },
 
   // Icon
@@ -209,7 +212,7 @@ export default {
   buttonLineHeight: 19,
   lineHeightH1: 32,
   lineHeightH2: 27,
-  lineHeightH3: 25,
+  lineHeightH3: 22,
   lineHeight: 24,
 
   // List
@@ -289,13 +292,13 @@ export default {
       topInset: 24,
       leftInset: 0,
       rightInset: 0,
-      bottomInset: 34,
+      bottomInset: 34
     },
     landscape: {
       topInset: 0,
       leftInset: 44,
       rightInset: 44,
-      bottomInset: 21,
-    },
-  },
+      bottomInset: 21
+    }
+  }
 };

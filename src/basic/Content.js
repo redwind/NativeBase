@@ -1,17 +1,30 @@
 import { connectStyle } from 'native-base-shoutem-theme';
 import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { SafeAreaView } from 'react-native';
-import { KeyboardAwareScrollView } from '@codler/react-native-keyboard-aware-scroll-view';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import variable from '../theme/variables/platform';
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
-import getStyle from '../utils/getStyle';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
-class Content extends PureComponent {
-  static contextTypes = {
-    theme: PropTypes.object
-  };
+class Content extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      orientation: 'portrait'
+    };
+  }
+
+  layoutChange(val) {
+    const maxComp = Math.max(variable.deviceWidth, variable.deviceHeight);
+
+    if (val.width >= maxComp) this.setState({ orientation: 'landscape' });
+    else {
+      this.setState({ orientation: 'portrait' });
+    }
+  }
 
   render() {
     const {
@@ -22,17 +35,16 @@ class Content extends PureComponent {
       padder,
       style
     } = this.props;
-
-    const containerStyle = {
-      flex: 1,
-      backgroundColor: getStyle(style).backgroundColor
-    };
-
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const containerStyle = { flex: 1 };
 
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+
+          return variables.isIphoneX ? (
       <SafeAreaView style={containerStyle}>
         <KeyboardAwareScrollView
           automaticallyAdjustContentInsets={false}
@@ -43,6 +55,7 @@ class Content extends PureComponent {
             this._root = c;
           }}
           {...this.props}
+          style={style}
           contentContainerStyle={[
             { padding: padder ? variables.contentPadding : undefined },
             contentContainerStyle
@@ -51,6 +64,26 @@ class Content extends PureComponent {
           {children}
         </KeyboardAwareScrollView>
       </SafeAreaView>
+    ) : (
+      <KeyboardAwareScrollView
+        automaticallyAdjustContentInsets={false}
+        resetScrollToCoords={disableKBDismissScroll ? null : { x: 0, y: 0 }}
+        keyboardShouldPersistTaps={keyboardShouldPersistTaps || 'handled'}
+        ref={c => {
+          this._scrollview = c;
+          this._root = c;
+        }}
+        {...this.props}
+        contentContainerStyle={[
+          { padding: padder ? variables.contentPadding : undefined },
+          contentContainerStyle
+        ]}
+      >
+        {children}
+      </KeyboardAwareScrollView>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }

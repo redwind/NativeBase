@@ -1,6 +1,7 @@
 import { StyleProvider, connectStyle } from 'native-base-shoutem-theme';
 import { keys } from 'lodash';
 import { Col, Row, Grid } from 'react-native-easy-grid';
+import { NativeBaseContext } from './context/NativeBaseContext';
 
 import setDefaultThemeStyle from './init';
 import getTheme from './theme/components';
@@ -66,6 +67,7 @@ export {
   variables,
   StyleProvider,
   connectStyle,
+  NativeBaseContext,
   Drawer,
   Button,
   DatePicker,

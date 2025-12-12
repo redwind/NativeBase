@@ -5,9 +5,11 @@ import _ from 'lodash';
 import { connectStyle, StyleProvider } from 'native-base-shoutem-theme';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
 import variable from './../../theme/variables/platform';
+import { NativeBaseContext } from '../../context/NativeBaseContext';
 import { TabHeading } from '../TabHeading';
 import { Text } from '../Text';
 import { TabContainer } from '../TabContainer';
+import { ViewPropTypes } from '../../utils';
 const ReactNative = require('react-native');
 
 const { StyleSheet, View, Animated, Platform } = ReactNative;
@@ -22,21 +24,10 @@ const DefaultTabBar = createReactClass({
     activeTextColor: PropTypes.string,
     inactiveTextColor: PropTypes.string,
     disabledTextColor: PropTypes.string,
-    tabStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
+    tabStyle: ViewPropTypes.style,
     renderTab: PropTypes.func,
-    underlineStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
-    tabContainerStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
-    accessible: PropTypes.array,
-    accessibilityLabel: PropTypes.array
-  },
-  contextTypes: {
-    theme: PropTypes.object
+    underlineStyle: ViewPropTypes.style,
+    tabContainerStyle: ViewPropTypes.style
   },
 
   getDefaultProps() {
@@ -63,15 +54,13 @@ const DefaultTabBar = createReactClass({
     tabHeaderStyle,
     tabFontSize,
     disabled,
-    disabledTextColor,
-    accessible,
-    accessibilityLabel
+    disabledTextColor
   ) {
     const headerContent =
       typeof name !== 'string' ? name.props.children : undefined;
     const { activeTextColor, inactiveTextColor } = this.props;
     const fontWeight = isTabActive ? 'bold' : 'normal';
-    const isDisabled = !!disabled;
+    const isDisabled = disabled !== undefined;
     let textColor;
     if (isDisabled) {
       textColor = disabledTextColor;
@@ -80,20 +69,13 @@ const DefaultTabBar = createReactClass({
     } else {
       textColor = textStyle ? textStyle.color : inactiveTextColor; // inactiveTextColor: default color for inactive Tab
     }
-    const accessibilityState = {
-      disabled: isDisabled ? true : false,
-      selected: isTabActive ? true : false,
-    };
+
     if (typeof name === 'string') {
       return (
         <Button
           style={{ flex: 1 }}
           disabled={isDisabled}
           key={name}
-          accessible={accessible}
-          accessibilityRole='tab'
-          accessibilityLabel={accessibilityLabel}
-          accessibilityState={accessibilityState}
           onPress={() => onPressHandler(page)}
         >
           <TabHeading
@@ -118,10 +100,6 @@ const DefaultTabBar = createReactClass({
         style={{ flex: 1 }}
         disabled={isDisabled}
         key={_.random(1.2, 5.2)}
-        accessible={accessible}
-        accessibilityRole='tab'
-        accessibilityLabel={accessibilityLabel}
-        accessibilityState={accessibilityState}
         onPress={() => onPressHandler(page)}
       >
         <TabHeading style={tabHeaderStyle} active={isTabActive}>
@@ -132,25 +110,28 @@ const DefaultTabBar = createReactClass({
   },
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
-    const platformStyle = variables.platformStyle;
-    const containerWidth = this.props.containerWidth;
-    const numberOfTabs = this.props.tabs.length;
-    const tabUnderlineStyle = {
-      position: 'absolute',
-      width: containerWidth / numberOfTabs,
-      height: 4,
-      backgroundColor: variables.topTabBarActiveBorderColor,
-      bottom: 0
-    };
-
-    const left = this.props.scrollValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, containerWidth / numberOfTabs]
-    });
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+          const platformStyle = variables.platformStyle;
+          const containerWidth = this.props.containerWidth;
+          const numberOfTabs = this.props.tabs.length;
+          const tabUnderlineStyle = {
+            position: 'absolute',
+            width: containerWidth / numberOfTabs,
+            height: 4,
+            backgroundColor: variables.topTabBarActiveBorderColor,
+            bottom: 0
+          };
+
+          const left = this.props.scrollValue.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, containerWidth / numberOfTabs]
+          });
+          return (
       <TabContainer
         style={[
           { backgroundColor: variables.tabDefaultBg },
@@ -172,15 +153,16 @@ const DefaultTabBar = createReactClass({
             this.props.tabHeaderStyle[page],
             variables.tabFontSize,
             this.props.disabled[page],
-            this.props.disabledTextColor,
-            this.props.accessible[page],
-            this.props.accessibilityLabel[page]
+            this.props.disabledTextColor
           );
         })}
         <Animated.View
           style={[tabUnderlineStyle, { left }, this.props.underlineStyle]}
         />
       </TabContainer>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 });

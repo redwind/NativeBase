@@ -10,15 +10,16 @@ import { connectStyle } from 'native-base-shoutem-theme';
 
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import variable from '../theme/variables/platform';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
 class ListItem extends Component {
-  static contextTypes = {
-    theme: PropTypes.object
-  };
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
 
     if (
       Platform.OS === 'ios' ||
@@ -43,17 +44,16 @@ class ListItem extends Component {
       );
     }
     return (
-      <TouchableNativeFeedback
-        ref={c => (this._root = c)}
-        useForeground
-        {...this.props}
-      >
+      <TouchableNativeFeedback ref={c => (this._root = c)} {...this.props}>
         <View style={{ marginLeft: -17, paddingLeft: 17 }}>
           <View {...this.props} testID={undefined}>
             {this.props.children}
           </View>
         </View>
       </TouchableNativeFeedback>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }

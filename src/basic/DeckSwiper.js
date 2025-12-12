@@ -116,13 +116,12 @@ class DeckSwiper extends Component {
         if (val > 0.2) {
           val = 0.2;
         }
-        Animated.timing(this.state.fadeAnim, { toValue: 0.8 + val, useNativeDriver: false }).start();
+        Animated.timing(this.state.fadeAnim, { toValue: 0.8 + val }).start();
         Animated.spring(this.state.enter, {
           toValue: 0.8 + val,
-          friction: 7,
-          useNativeDriver: false
+          friction: 7
         }).start();
-        Animated.event([null, { dx: this.state.pan.x }], { useNativeDriver: false })(e, gestureState);
+        Animated.event([null, { dx: this.state.pan.x }])(e, gestureState);
       },
 
       onPanResponderRelease: (e, { vx, vy }) => {
@@ -150,14 +149,12 @@ class DeckSwiper extends Component {
 
           Animated.decay(this.state.pan, {
             velocity: { x: velocity, y: vy },
-            deceleration: 0.98,
-            useNativeDriver: false
+            deceleration: 0.98
           }).start(this._resetState.bind(this));
         } else {
           Animated.spring(this.state.pan, {
             toValue: { x: 0, y: 0 },
-            friction: 4,
-            useNativeDriver: false
+            friction: 4
           }).start();
         }
       }
@@ -178,13 +175,12 @@ class DeckSwiper extends Component {
   swipeRight() {
     if (this.props.onSwiping) this.props.onSwiping('right');
     setTimeout(() => {
-      Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: false }).start();
-      Animated.spring(this.state.enter, { toValue: 1, friction: 7, useNativeDriver: false }).start();
+      Animated.timing(this.state.fadeAnim, { toValue: 1 }).start();
+      Animated.spring(this.state.enter, { toValue: 1, friction: 7 }).start();
       this.selectNext();
       Animated.decay(this.state.pan, {
         velocity: { x: 8, y: 1 },
-        deceleration: 0.98,
-        useNativeDriver: false
+        deceleration: 0.98
       }).start(this._resetState.bind(this));
     }, 300);
   }
@@ -192,13 +188,12 @@ class DeckSwiper extends Component {
   swipeLeft() {
     if (this.props.onSwiping) this.props.onSwiping('left');
     setTimeout(() => {
-      Animated.timing(this.state.fadeAnim, { toValue: 1, useNativeDriver: false }).start();
-      Animated.spring(this.state.enter, { toValue: 1, friction: 7, useNativeDriver: false }).start();
+      Animated.timing(this.state.fadeAnim, { toValue: 1 }).start();
+      Animated.spring(this.state.enter, { toValue: 1, friction: 7 }).start();
       this.selectNext();
       Animated.decay(this.state.pan, {
         velocity: { x: -8, y: 1 },
-        deceleration: 0.98,
-        userNativeDriver: false
+        deceleration: 0.98
       }).start(this._resetState.bind(this));
     }, 300);
   }

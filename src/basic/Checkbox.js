@@ -8,35 +8,21 @@ import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import variable from '../theme/variables/platform';
 import { PLATFORM } from '../theme/variables/commonColor';
 import computeProps from '../utils/computeProps';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
 class CheckBox extends Component {
-  static contextTypes = {
-    theme: PropTypes.object
-  };
 
   getInitialStyle(variables) {
-    const { color, checked, checkboxType, borderColor } = this.props;
+    const { color, checked } = this.props;
     return {
       checkStyle: {
-        borderRadius: this.getBorderRadius(checkboxType, variables),
-        borderColor: borderColor || color || variables.checkboxBgColor,
+        borderColor: color || variables.checkboxBgColor,
         backgroundColor:
           checked === true
             ? color || variables.checkboxBgColor
             : variables.checkboxDefaultColor
       }
     };
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getBorderRadius(checkboxType, variables) {
-    if (checkboxType === 'rounded') {
-      return 13;
-    }
-    if (checkboxType === 'square') {
-      return 0;
-    }
-    return variables.CheckboxRadius;
   }
 
   prepareRootProps(variables) {
@@ -47,13 +33,16 @@ class CheckBox extends Component {
     return computeProps(this.props, defaultProps);
   }
   render() {
-    const { checked, tickColor } = this.props;
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
-    const platformStyle = variables.platformStyle;
-    const platform = variables.platform;
+    const { checked } = this.props;
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+          const platformStyle = variables.platformStyle;
+          const platform = variables.platform;
+          return (
       <TouchableOpacity
         ref={c => (this._root = c)}
         {...this.prepareRootProps(variables)}
@@ -62,7 +51,7 @@ class CheckBox extends Component {
           style={{
             color:
               checked === true
-                ? tickColor || variables.checkboxTickColor
+                ? variables.checkboxTickColor
                 : variables.checkboxDefaultColor,
             fontSize: variables.CheckboxFontSize,
             lineHeight: variables.CheckboxIconSize,
@@ -76,6 +65,9 @@ class CheckBox extends Component {
           }
         />
       </TouchableOpacity>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }

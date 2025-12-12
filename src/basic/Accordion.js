@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /* eslint-disable react/prefer-stateless-function */
 import React from 'react';
 import {
@@ -7,23 +8,16 @@ import {
   StyleSheet,
   View
 } from 'react-native';
+
+import variable from '../theme/variables/platform';
+import { NativeBaseContext } from '../context/NativeBaseContext';
+
 import { Text } from './Text';
 import { Icon } from './Icon';
-import variable from '../theme/variables/platform';
-
-const styles = StyleSheet.create({
-  defaultHeader: {
-    flexDirection: 'row',
-    padding: variable.accordionContentPadding,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-});
 
 class DefaultHeader extends React.Component {
   render() {
     const {
-      disable,
       expanded,
       expandedIcon,
       expandedIconStyle,
@@ -32,20 +26,23 @@ class DefaultHeader extends React.Component {
       iconStyle,
       title
     } = this.props;
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+
+    return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+
     return (
       <View
         style={[
+          // eslint-disable-next-line no-use-before-define
           styles.defaultHeader,
           headerStyle || { backgroundColor: variables.headerStyle }
         ]}
       >
-        <Text style={{ color: disable ? variable.disableRow : null }}>
-          {' '}
-          {title}
-        </Text>
+        <Text> {title}</Text>
         <Icon
           style={[
             { fontSize: variables.accordionIconFontSize },
@@ -55,13 +52,16 @@ class DefaultHeader extends React.Component {
                 : { color: variables.expandedIconStyle }
               : icon && iconStyle
               ? iconStyle
-              : { color: disable ? variable.disableRow : variables.iconStyle }
+              : { color: variables.iconStyle }
           ]}
           name={
             expanded ? expandedIcon || 'ios-arrow-up' : icon || 'ios-arrow-down'
           }
         />
       </View>
+        );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }
@@ -69,10 +69,13 @@ class DefaultHeader extends React.Component {
 class DefaultContent extends React.Component {
   render() {
     const { content, contentStyle } = this.props;
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+          return (
       <Text
         style={[
           { padding: variable.accordionContentPadding },
@@ -81,6 +84,9 @@ class DefaultContent extends React.Component {
       >
         {content}
       </Text>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }
@@ -111,7 +117,6 @@ class AccordionItem extends React.Component {
   render() {
     const {
       contentStyle,
-      disable,
       expanded,
       expandedIcon,
       expandedIconStyle,
@@ -126,10 +131,10 @@ class AccordionItem extends React.Component {
       renderHeader,
       setSelected
     } = this.props;
+
     return (
       <View>
         <TouchableWithoutFeedback
-          disabled={disable}
           onPress={() => {
             onAccordionOpen && !expanded && onAccordionOpen(item, index);
             onAccordionClose && expanded && onAccordionClose(item, index);
@@ -138,16 +143,16 @@ class AccordionItem extends React.Component {
         >
           <View>
             {renderHeader ? (
-              renderHeader(item, expanded, index)
+              renderHeader(item, expanded)
             ) : (
               <DefaultHeader
-                disable={disable}
                 expanded={expanded}
+                expandedIcon={expandedIcon}
+                expandedIconStyle={expandedIconStyle}
                 headerStyle={headerStyle}
                 icon={icon}
                 iconStyle={iconStyle}
-                expandedIcon={expandedIcon}
-                expandedIconStyle={expandedIconStyle}
+                title={item.title}
               />
             )}
           </View>
@@ -155,7 +160,7 @@ class AccordionItem extends React.Component {
         {expanded ? (
           <AccordionSubItem>
             {renderContent ? (
-              renderContent(item, index)
+              renderContent(item)
             ) : (
               <DefaultContent
                 content={item.content}
@@ -172,28 +177,16 @@ class AccordionItem extends React.Component {
 export class Accordion extends React.Component {
   constructor(props) {
     super(props);
-
-    const { expanded, expandMultiple } = this.props;
-    // eslint-disable-next-line no-unused-vars
-    let selected;
-    if (expanded !== undefined && expanded !== null) {
-      selected = Array.isArray(expanded) ? expanded : [expanded];
-      selected = expandMultiple ? selected : selected.slice(0, 1);
-    }
     this.state = {
       selected: props.expanded
     };
   }
 
   setSelected(index) {
-    const { expandMultiple } = this.props;
-    const selected = this.state.selected.slice();
-    if (selected.indexOf(index) !== -1) {
-      selected.splice(selected.indexOf(index), 1);
-      this.setState({ selected });
+    if (this.state.selected === index) {
+      this.setState({ selected: undefined });
     } else {
-      selected.push(index);
-      this.setState({ selected: expandMultiple ? selected : [index] });
+      this.setState({ selected: index });
     }
   }
 
@@ -201,7 +194,6 @@ export class Accordion extends React.Component {
     const {
       contentStyle,
       dataArray,
-      disable,
       expandedIcon,
       expandedIconStyle,
       headerStyle,
@@ -213,10 +205,14 @@ export class Accordion extends React.Component {
       renderHeader,
       style
     } = this.props;
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+          return (
       <FlatList
         data={dataArray}
         extraData={this.state}
@@ -230,26 +226,37 @@ export class Accordion extends React.Component {
         keyExtractor={(item, index) => String(index)}
         renderItem={({ item, index }) => (
           <AccordionItem
-            disable={disable === index}
             key={String(index)}
-            item={item}
-            expanded={this.state.selected.indexOf(index) !== -1}
-            index={index}
-            setSelected={i => this.setSelected(i)}
-            headerStyle={headerStyle}
             contentStyle={contentStyle}
-            renderHeader={renderHeader}
-            renderContent={renderContent}
-            icon={icon}
-            iconStyle={iconStyle}
+            expanded={this.state.selected === index}
             expandedIcon={expandedIcon}
             expandedIconStyle={expandedIconStyle}
+            headerStyle={headerStyle}
+            icon={icon}
+            iconStyle={iconStyle}
+            index={index}
+            item={item}
+            renderContent={renderContent}
+            renderHeader={renderHeader}
             onAccordionOpen={onAccordionOpen}
             onAccordionClose={onAccordionClose}
+            setSelected={i => this.setSelected(i)}
           />
         )}
         {...this.props}
       />
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  defaultHeader: {
+    flexDirection: 'row',
+    padding: variable.accordionContentPadding,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }
+});

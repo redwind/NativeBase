@@ -5,16 +5,17 @@ import { connectStyle } from 'native-base-shoutem-theme';
 
 import variable from '../theme/variables/platform';
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
 class Spinner extends Component {
-  static contextTypes = {
-    theme: PropTypes.object
-  };
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+          return (
       <ActivityIndicator
         ref={c => (this._root = c)}
         {...this.props}
@@ -27,6 +28,9 @@ class Spinner extends Component {
         }
         size={this.props.size ? this.props.size : 'large'}
       />
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }

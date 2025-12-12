@@ -7,11 +7,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import variable from '../theme/variables/platform';
 import computeProps from '../utils/computeProps';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
 class Radio extends Component {
-  static contextTypes = {
-    theme: PropTypes.object
-  };
   prepareRootProps() {
     const defaultProps = {
       standardStyle: false
@@ -21,11 +19,14 @@ class Radio extends Component {
   }
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
-
     return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
+
+          return (
       <TouchableOpacity
         ref={c => (this._root = c)}
         {...this.prepareRootProps()}
@@ -78,6 +79,9 @@ class Radio extends Component {
           />
         )}
       </TouchableOpacity>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }

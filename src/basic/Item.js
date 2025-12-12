@@ -7,7 +7,7 @@ import {
   Animated,
   Platform,
   View,
-  StyleSheet,
+  StyleSheet
 } from 'react-native';
 import { isArray, remove } from 'lodash';
 import { connectStyle } from 'native-base-shoutem-theme';
@@ -25,46 +25,15 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFocused: false,
+      isFocussed: true,
       text: '',
       topAnim: new Animated.Value(18),
-      opacAnim: new Animated.Value(1),
+      opacAnim: new Animated.Value(1)
     };
   }
   componentDidMount() {
     if (this.props.floatingLabel) {
-      if (
-        (this.inputProps && this.inputProps.value) ||
-        this.inputProps.defaultValue
-      ) {
-        const effect = () => {
-          this.setState({ isFocused: true });
-        };
-        this.floatUp(-16);
-        effect();
-      }
-      if (this.inputProps && this.inputProps.getRef)
-        this.inputProps.getRef(this._inputRef);
-    }
-  }
-
-  // Temporary fix to avoid the crash.
-  // To be refactored to getDerivedStateFromProps.
-
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const childrenArray = React.Children.toArray(nextProps.children);
-
-    remove(childrenArray, (item) => {
-      if (item.type.displayName === 'Styled(Input)') {
-        this.inputProps = item.props;
-        return item;
-      }
-      return null;
-    });
-    if (this.props.floatingLabel) {
       if (this.inputProps && this.inputProps.value) {
-        this.setState({ isFocused: true });
         this.floatUp(-16);
       }
       if (this.inputProps && this.inputProps.getRef)
@@ -78,8 +47,8 @@ class Item extends Component {
         borderWidth: this.props.rounded ? variables.borderWidth * 2 : undefined,
         borderRadius: this.props.rounded
           ? variables.inputGroupRoundedBorderRadius
-          : undefined,
-      },
+          : undefined
+      }
     };
   }
 
@@ -98,35 +67,55 @@ class Item extends Component {
   floatBack(e) {
     Animated.timing(this.state.topAnim, {
       toValue: e || 18,
-      duration: 150,
-      useNativeDriver: false,
+      duration: 150
     }).start();
     Animated.timing(this.state.opacAnim, {
       toValue: 1,
-      duration: 150,
-      useNativeDriver: false,
+      duration: 150
     }).start();
   }
 
   floatUp(e) {
     Animated.timing(this.state.topAnim, {
       toValue: e || -22,
-      duration: 150,
-      useNativeDriver: false,
+      duration: 150
     }).start();
     Animated.timing(this.state.opacAnim, {
       toValue: 0.7,
-      duration: 150,
-      useNativeDriver: false,
+      duration: 150
     }).start();
   }
 
   prepareRootProps() {
     const defaultProps = {
-      style: this.getInitialStyle().roundedInputGroup,
+      style: this.getInitialStyle().roundedInputGroup
     };
 
     return computeProps(this.props, defaultProps);
+  }
+
+  // Temporary fix to avoid the crash.
+  // To be refactored to getDerivedStateFromProps.
+
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const childrenArray = React.Children.toArray(nextProps.children);
+
+    remove(childrenArray, item => {
+      if (item.type.displayName === 'Styled(Input)') {
+        this.inputProps = item.props;
+        return item;
+      }
+      return null;
+    });
+    if (this.props.floatingLabel) {
+      if (this.inputProps && this.inputProps.value) {
+        this.setState({ isFocused: true });
+        this.floatUp(-16);
+      }
+      if (this.inputProps && this.inputProps.getRef)
+        this.inputProps.getRef(this._inputRef);
+    }
   }
 
   renderChildren() {
@@ -135,7 +124,7 @@ class Item extends Component {
 
     let label = [];
     let labelProps = {};
-    label = remove(childrenArray, (item) => {
+    label = remove(childrenArray, item => {
       if (item.type === Label) {
         labelProps = item.props;
         return item;
@@ -144,7 +133,7 @@ class Item extends Component {
     });
 
     let inputProps = {};
-    remove(childrenArray, (item) => {
+    remove(childrenArray, item => {
       if (item.type === Input) {
         inputProps = item.props;
         this.inputProps = item.props;
@@ -155,7 +144,7 @@ class Item extends Component {
 
     let icon = [];
     let iconProps = {};
-    icon = remove(childrenArray, (item) => {
+    icon = remove(childrenArray, item => {
       if (item.type === Icon) {
         iconProps = item.props;
         return item;
@@ -164,7 +153,7 @@ class Item extends Component {
     });
 
     let image = [];
-    image = remove(childrenArray, (item) => {
+    image = remove(childrenArray, item => {
       if (item.type === Thumbnail) {
         return item;
       }
@@ -182,7 +171,7 @@ class Item extends Component {
         ) {
           isIcon = true;
           newChildren.push(
-            <Icon key={i} {...this.props.children[i].props} />
+            <Icon key={[i]} {...this.props.children[i].props} />
           );
         }
 
@@ -210,7 +199,7 @@ class Item extends Component {
                 top: this.state.topAnim,
                 opacity: this.state.opacAnim,
                 paddingTop: Platform.OS === 'ios' ? undefined : undefined,
-                paddingBottom: Platform.OS === 'ios' ? undefined : 12,
+                paddingBottom: Platform.OS === 'ios' ? undefined : 12
               }}
             >
               <Label {...labelProps}>
@@ -221,7 +210,7 @@ class Item extends Component {
 
           newChildren.push(
             <Input
-              ref={(c) => (this._inputRef = c)}
+              ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
               placeholder={this.getPlacholderValue(inputProps)}
@@ -231,10 +220,10 @@ class Item extends Component {
                   inputProps.onFocus();
                 }
               }}
-              onBlur={(e) => {
+              onBlur={e => {
                 if (inputProps.value) {
                   this.setState({
-                    isFocused: true,
+                    isFocused: true
                   });
                 } else if (!this.state.text.length) {
                   this.setState({ isFocused: false });
@@ -244,7 +233,7 @@ class Item extends Component {
                   inputProps.onBlur(e);
                 }
               }}
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({ text });
                 if (inputProps.onChangeText) {
                   inputProps.onChangeText(text);
@@ -267,7 +256,7 @@ class Item extends Component {
               {...this.props.children[i].props}
               style={{
                 right: 10,
-                left: i === this.props.children.length - 1 ? undefined : 0,
+                left: i === this.props.children.length - 1 ? undefined : 0
               }}
             />
           );
@@ -291,7 +280,7 @@ class Item extends Component {
                 top: this.state.topAnim,
                 opacity: this.state.opacAnim,
                 paddingTop: Platform.OS === 'ios' ? undefined : undefined,
-                paddingBottom: Platform.OS === 'ios' ? undefined : 12,
+                paddingBottom: Platform.OS === 'ios' ? undefined : 12
               }}
             >
               <Label {...labelProps}>
@@ -302,7 +291,7 @@ class Item extends Component {
 
           newChildren.push(
             <Input
-              ref={(c) => (this._inputRef = c)}
+              ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
               placeholder={this.getPlacholderValue(inputProps)}
@@ -310,14 +299,16 @@ class Item extends Component {
                 this.setState({ isFocused: true });
                 inputProps.onFocus && inputProps.onFocus();
               }}
-              onBlur={(e) => {
+              onBlur={e => {
                 inputProps.value
-                  ? this.setState({ isFocused: true })
+                  ? this.setState({
+                    isFocused: true
+                  })
                   : !this.state.text.length &&
                     this.setState({ isFocused: false });
                 inputProps.onBlur && inputProps.onBlur(e);
               }}
-              onChangeText={(text) => {
+              onChangeText={text => {
                 this.setState({ text });
                 inputProps.onChangeText && inputProps.onChangeText(text);
               }}
@@ -330,7 +321,7 @@ class Item extends Component {
                     : isImage
                     ? 10
                     : 0,
-                marginRight: 12,
+                marginRight: 12
               }}
             />
           );
@@ -347,7 +338,7 @@ class Item extends Component {
             top: this.state.topAnim,
             opacity: this.state.opacAnim,
             paddingTop: Platform.OS === 'ios' ? undefined : undefined,
-            paddingBottom: Platform.OS === 'ios' ? undefined : 12,
+            paddingBottom: Platform.OS === 'ios' ? undefined : 12
           }}
         >
           <Label {...labelProps}>{this.renderLabel(label, labelProps)}</Label>
@@ -356,8 +347,8 @@ class Item extends Component {
 
       newChildren.push(
         <Input
-          ref={(c) => (this._inputRef = c)}
-          // value={this.state.text}
+          ref={c => (this._inputRef = c)}
+          value={this.state.text}
           key="l2"
           {...inputProps}
           placeholder={this.getPlacholderValue(inputProps)}
@@ -365,13 +356,15 @@ class Item extends Component {
             this.setState({ isFocused: true });
             inputProps.onFocus && inputProps.onFocus();
           }}
-          onBlur={(e) => {
+          onBlur={e => {
             inputProps.value
-              ? this.setState({ isFocused: true })
+              ? this.setState({
+                isFocused: true
+              })
               : !this.state.text.length && this.setState({ isFocused: false });
             inputProps.onBlur && inputProps.onBlur(e);
           }}
-          onChangeText={(text) => {
+          onChangeText={text => {
             this.setState({ text });
             inputProps.onChangeText && inputProps.onChangeText(text);
           }}
@@ -384,7 +377,7 @@ class Item extends Component {
           style={{
             flexDirection: 'row',
             flex: 1,
-            width: variables.deviceWidth - 15,
+            width: variables.deviceWidth - 15
           }}
         >
           <Icon key="s1" {...iconProps} />
@@ -408,7 +401,7 @@ class Item extends Component {
     const newLabel = [];
     const labelStyle = StyleSheet.flatten([
       { fontSize: 15, lineHeight: 30 },
-      labelProps.style,
+      labelProps.style
     ]);
     if (this.props.floatingLabel) {
       if (this.state.isFocused) {
@@ -417,7 +410,7 @@ class Item extends Component {
             ...labelProps,
             key: 'newFLabel',
             float: true,
-            style: labelStyle,
+            style: labelStyle
           })
         );
         this.floatUp(-16);
@@ -429,7 +422,7 @@ class Item extends Component {
       newLabel.push(
         React.createElement(Label, {
           ...labelProps,
-          key: 'newLabel',
+          key: 'newLabel'
         })
       );
     }
@@ -439,7 +432,7 @@ class Item extends Component {
   render() {
     return (
       <TouchableOpacity
-        ref={(c) => (this._root = c)}
+        ref={c => (this._root = c)}
         {...this.prepareRootProps()}
         activeOpacity={1}
       >
@@ -454,20 +447,18 @@ Item.propTypes = {
   style: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.number,
-    PropTypes.array,
+    PropTypes.array
   ]),
   inlineLabel: PropTypes.bool,
   floatingLabel: PropTypes.bool,
   stackedLabel: PropTypes.bool,
   fixedLabel: PropTypes.bool,
   success: PropTypes.bool,
-  error: PropTypes.bool,
+  error: PropTypes.bool
 };
 
-const StyledItem = connectStyle(
-  'NativeBase.Item',
-  {},
-  mapPropsToStyleNames
-)(Item);
+const StyledItem = connectStyle('NativeBase.Item', {}, mapPropsToStyleNames)(
+  Item
+);
 
 export { StyledItem as Item };

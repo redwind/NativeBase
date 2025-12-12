@@ -5,9 +5,11 @@ import { isEqual } from 'lodash';
 import { connectStyle, StyleProvider } from 'native-base-shoutem-theme';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
 import variable from './../../theme/variables/platform';
+import { NativeBaseContext } from '../../context/NativeBaseContext';
 import { TabHeading } from '../TabHeading';
 import { Text } from '../Text';
 import { TabContainer } from '../TabContainer';
+import { ViewPropTypes } from '../../utils';
 const Button = require('./Button');
 const ReactNative = require('react-native');
 const {
@@ -30,23 +32,12 @@ const ScrollableTabBar = createReactClass({
     activeTextColor: PropTypes.string,
     inactiveTextColor: PropTypes.string,
     scrollOffset: PropTypes.number,
-    style: PropTypes.shape({
-      style: PropTypes.any,
-    }),
-    tabStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
-    tabsContainerStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
+    style: ViewPropTypes.style,
+    tabStyle: ViewPropTypes.style,
+    tabsContainerStyle: ViewPropTypes.style,
     renderTab: PropTypes.func,
-    underlineStyle: PropTypes.shape({
-      style: PropTypes.any,
-    }),
+    underlineStyle: ViewPropTypes.style,
     onScroll: PropTypes.func
-  },
-  contextTypes: {
-    theme: PropTypes.object
   },
 
   getDefaultProps() {
@@ -211,7 +202,7 @@ const ScrollableTabBar = createReactClass({
         </TabHeading>
       </Button>
     );
-
+    
   },
 
   measureTab(page, event) {
@@ -221,9 +212,12 @@ const ScrollableTabBar = createReactClass({
   },
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
     const tabUnderlineStyle = {
       position: 'absolute',
       height: 4,
@@ -281,7 +275,7 @@ const ScrollableTabBar = createReactClass({
                 this.props.textStyle[page],
                 this.props.activeTextStyle[page],
                 this.props.tabHeaderStyle[page],
-                this.props.tabFontSize[page]
+                variables.tabFontSize
               );
             })}
             <Animated.View
@@ -294,6 +288,9 @@ const ScrollableTabBar = createReactClass({
           </View>
         </ScrollView>
       </View>
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   },
 

@@ -5,14 +5,18 @@ import { connectStyle } from 'native-base-shoutem-theme';
 
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import variable from '../theme/variables/platform';
+import { NativeBaseContext } from '../context/NativeBaseContext';
 
 import NativeBaseComponent from './Base/NativeBaseComponent';
 
 class Input extends NativeBaseComponent {
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    return (
+      <NativeBaseContext.Consumer>
+        {context => {
+          const variables = context && context.theme
+            ? context.theme['@@shoutem.theme/themeStyle'].variables
+            : variable;
     return (
       <TextInput
         ref={c => {
@@ -28,6 +32,9 @@ class Input extends NativeBaseComponent {
         }
         {...this.props}
       />
+          );
+        }}
+      </NativeBaseContext.Consumer>
     );
   }
 }
