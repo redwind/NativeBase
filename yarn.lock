@@ -5678,7 +5678,7 @@ nanomatch@^1.2.9:
 
 "native-base-shoutem-theme@https://github.com/redwind/native-base-shoutem-theme#migrate-context":
   version "0.3.1"
-  resolved "https://github.com/redwind/native-base-shoutem-theme#5493279244a477285bc36e45c38cdb6aea08f101"
+  resolved "https://github.com/redwind/native-base-shoutem-theme#ce3ac67833824aad6d851321531b6e77671a4f6a"
   dependencies:
     hoist-non-react-statics "1.0.5"
     lodash "4.17.14"
