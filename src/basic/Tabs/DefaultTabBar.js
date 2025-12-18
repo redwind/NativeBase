@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import createReactClass from 'create-react-class';
 import _ from 'lodash';
-import { connectStyle, StyleProvider } from 'native-base-shoutem-theme';
+import { connectStyle, StyleProvider, ThemeContext } from 'native-base-shoutem-theme';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
 import variable from './../../theme/variables/platform';
 import { TabHeading } from '../TabHeading';
@@ -13,8 +12,8 @@ const ReactNative = require('react-native');
 const { StyleSheet, View, Animated, Platform } = ReactNative;
 const Button = require('./Button');
 
-const DefaultTabBar = createReactClass({
-  propTypes: {
+class DefaultTabBar extends Component {
+  static propTypes = {
     goToPage: PropTypes.func,
     activeTab: PropTypes.number,
     tabs: PropTypes.array,
@@ -34,22 +33,19 @@ const DefaultTabBar = createReactClass({
     }),
     accessible: PropTypes.array,
     accessibilityLabel: PropTypes.array
-  },
-  contextTypes: {
-    theme: PropTypes.object
-  },
+  };
 
-  getDefaultProps() {
-    return {
-      activeTextColor: variable.topTabBarActiveTextColor,
-      inactiveTextColor: variable.topTabBarTextColor,
-      disabledTextColor: variable.tabBarDisabledTextColor,
-      backgroundColor: 'transparent',
-      tabFontSize: variable.tabFontSize
-    };
-  },
+  static defaultProps = {
+    activeTextColor: variable.topTabBarActiveTextColor,
+    inactiveTextColor: variable.topTabBarTextColor,
+    disabledTextColor: variable.tabBarDisabledTextColor,
+    backgroundColor: 'transparent',
+    tabFontSize: variable.tabFontSize
+  };
 
-  renderTabOption(name, page) {},
+  static contextType = ThemeContext;
+
+  renderTabOption(name, page) {}
 
   renderTab(
     name,
@@ -129,7 +125,7 @@ const DefaultTabBar = createReactClass({
         </TabHeading>
       </Button>
     );
-  },
+  }
 
   render() {
     const variables = this.context.theme
@@ -183,7 +179,7 @@ const DefaultTabBar = createReactClass({
       </TabContainer>
     );
   }
-});
+}
 
 // module.exports = DefaultTabBar;
 const StyledTab = connectStyle(

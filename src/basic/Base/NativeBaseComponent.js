@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ThemeContext } from 'native-base-shoutem-theme';
 
 export default class NativeBaseComponent extends Component {
   static propTypes = {
@@ -7,20 +8,17 @@ export default class NativeBaseComponent extends Component {
     theme: PropTypes.object
   };
 
-  static contextTypes = {
-    theme: PropTypes.object,
-    foregroundColor: PropTypes.string
-  };
+  static contextType = ThemeContext;
 
-  static childContextTypes = {
-    theme: PropTypes.object,
-    foregroundColor: PropTypes.string
-  };
-
-  getChildContext() {
-    return {
-      theme: this.props.theme ? this.props.theme : this.context.theme
-    };
+  /**
+   * Get theme from props.theme or context.theme
+   * If you need to provide theme to children, wrap them with:
+   * <ThemeContext.Provider value={this.getTheme()}>
+   *   {children}
+   * </ThemeContext.Provider>
+   */
+  getTheme() {
+    return this.props.theme ? this.props.theme : this.context.theme;
   }
 
   getContextForegroundColor() {
