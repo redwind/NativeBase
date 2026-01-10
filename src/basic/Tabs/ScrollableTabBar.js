@@ -67,6 +67,7 @@ class ScrollableTabBar extends Component {
       _widthTabUnderline: new Animated.Value(0),
       _containerWidth: null
     };
+    this.renderTab = this.renderTab.bind(this);
   }
 
   componentDidMount() {
@@ -260,7 +261,6 @@ class ScrollableTabBar extends Component {
               { width: this.state._containerWidth },
               this.props.tabsContainerStyle
             ]}
-            ref={'tabContainer'}
             onLayout={this.onTabContainerLayout}
           >
             {this.props.tabs.map((name, page) => {
