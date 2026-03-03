@@ -70,6 +70,8 @@ class ScrollableTabBar extends Component {
     this.renderTab = this.renderTab.bind(this);
     this.updateView = this.updateView.bind(this);
     this.measureTab = this.measureTab.bind(this);
+    this.onTabContainerLayout = this.onTabContainerLayout.bind(this);
+    this.onContainerLayout = this.onContainerLayout.bind(this);
   }
 
   componentDidMount() {
