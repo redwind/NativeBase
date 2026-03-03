@@ -68,10 +68,17 @@ class ScrollableTabBar extends Component {
       _containerWidth: null
     };
     this.renderTab = this.renderTab.bind(this);
+    this.updateView = this.updateView.bind(this);
   }
 
   componentDidMount() {
-    this.props.scrollValue.addListener(this.updateView);
+    this._updateViewListenerId = this.props.scrollValue.addListener(this.updateView);
+  }
+
+  componentWillUnmount() {
+    if (this._updateViewListenerId) {
+      this.props.scrollValue.removeListener(this._updateViewListenerId);
+    }
   }
 
   updateView(offset) {
