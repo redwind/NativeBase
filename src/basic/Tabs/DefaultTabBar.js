@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { connectStyle, StyleProvider, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
 import variable from './../../theme/variables/platform';
 import { TabHeading } from '../TabHeading';
@@ -42,8 +42,6 @@ class DefaultTabBar extends Component {
     backgroundColor: 'transparent',
     tabFontSize: variable.tabFontSize
   };
-
-  static contextType = ThemeContext;
 
   renderTabOption(name, page) {}
 
@@ -128,9 +126,7 @@ class DefaultTabBar extends Component {
   }
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
     const platformStyle = variables.platformStyle;
     const containerWidth = this.props.containerWidth;
     const numberOfTabs = this.props.tabs.length;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
-import { connectStyle, StyleProvider, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle, StyleProvider } from 'native-base-shoutem-theme';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
 import variable from './../../theme/variables/platform';
 import { TabHeading } from '../TabHeading';
@@ -56,8 +56,6 @@ class ScrollableTabBar extends Component {
     underlineStyle: {},
     tabFontSize: variable.tabFontSize
   };
-
-  static contextType = ThemeContext;
 
   constructor(props) {
     super(props);
@@ -228,9 +226,7 @@ class ScrollableTabBar extends Component {
   }
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
     const tabUnderlineStyle = {
       position: 'absolute',
       height: 4,

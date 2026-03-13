@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform } from 'react-native';
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 
 import variable from '../../theme/variables/platform';
 import mapPropsToStyleNames from '../../utils/mapPropsToStyleNames';
@@ -14,16 +14,12 @@ const IS_IOS = Platform.OS === 'ios';
 
 
 class Icon extends React.PureComponent {
-  static contextType = ThemeContext;
-
   setRoot(c){
     this._root = c;
   }
 
   getName() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
     const platformStyle = variables.platformStyle;
 
     if ((this.props.type || variables.iconFamily) === 'Ionicons') {

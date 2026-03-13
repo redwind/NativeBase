@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, ViewPropTypes } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 
 import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import getStyle from '../utils/getStyle';
 
 class Footer extends Component {
-  static contextType = ThemeContext;
-
   render() {
     const { style } = this.props;
 

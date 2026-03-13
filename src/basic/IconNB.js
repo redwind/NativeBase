@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
-import { get } from 'lodash';
+import { connectStyle } from 'native-base-shoutem-theme';
+import variable from '../theme/variables/platform';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -24,8 +24,6 @@ import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 const Icomoon = createIconSetFromIcoMoon(icoMoonConfig);
 
 class IconNB extends React.PureComponent {
-  static contextType = ThemeContext;
-
   constructor(props) {
     super(props);
     this.setIcon(props.type);
@@ -43,10 +41,8 @@ class IconNB extends React.PureComponent {
   }
 
   setIcon(iconType) {
-    if (iconType === undefined && get(this, 'context.theme')) {
-      // eslint-disable-next-line
-      iconType = this.context.theme['@@shoutem.theme/themeStyle'].variables
-        .iconFamily;
+    if (iconType === undefined) {
+      iconType = variable.iconFamily;
     }
     switch (iconType) {
       case 'AntDesign':

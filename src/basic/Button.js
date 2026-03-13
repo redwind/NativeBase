@@ -8,7 +8,7 @@ import {
   TouchableNativeFeedback,
   StyleSheet
 } from 'react-native';
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 
 import variable from '../theme/variables/platform';
 import { PLATFORM } from '../theme/variables/commonColor';
@@ -18,8 +18,6 @@ import { Text } from './Text';
 
 
 class Button extends React.PureComponent {
-  static contextType = ThemeContext;
-
   setRoot(c){
     this._root = c;
   }
@@ -50,9 +48,7 @@ class Button extends React.PureComponent {
   }
 
   render() {
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
 
     const children =
       Platform.OS === PLATFORM.IOS || !variables.buttonUppercaseAndroidText

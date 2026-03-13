@@ -1,4 +1,4 @@
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,8 +9,6 @@ import mapPropsToStyleNames from '../utils/mapPropsToStyleNames';
 import getStyle from '../utils/getStyle';
 
 class Content extends PureComponent {
-  static contextType = ThemeContext;
-
   render() {
     const {
       children,
@@ -26,9 +24,7 @@ class Content extends PureComponent {
       backgroundColor: getStyle(style).backgroundColor
     };
 
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
 
     return (
       <SafeAreaView style={containerStyle}>

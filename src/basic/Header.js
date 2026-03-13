@@ -1,6 +1,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-unneeded-ternary */
-import { connectStyle, ThemeContext } from 'native-base-shoutem-theme';
+import { connectStyle } from 'native-base-shoutem-theme';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { View, StatusBar, ViewPropTypes } from 'react-native';
@@ -11,8 +11,6 @@ import getStyle from '../utils/getStyle';
 import variable from '../theme/variables/platform';
 
 class Header extends Component {
-  static contextType = ThemeContext;
-
   render() {
     const {
       androidStatusBarColor,
@@ -22,9 +20,7 @@ class Header extends Component {
       translucent
     } = this.props;
 
-    const variables = this.context.theme
-      ? this.context.theme['@@shoutem.theme/themeStyle'].variables
-      : variable;
+    const variables = variable;
 
     const platformStyle = variables.platformStyle;
 
