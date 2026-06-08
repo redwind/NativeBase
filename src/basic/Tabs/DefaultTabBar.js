@@ -45,7 +45,7 @@ class DefaultTabBar extends Component {
 
   renderTabOption(name, page) {}
 
-  renderTab(
+  renderTab = (
     name,
     page,
     isTabActive,
@@ -60,7 +60,7 @@ class DefaultTabBar extends Component {
     disabledTextColor,
     accessible,
     accessibilityLabel
-  ) {
+  ) => {
     const headerContent =
       typeof name !== 'string' ? name.props.children : undefined;
     const { activeTextColor, inactiveTextColor } = this.props;
